@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+
+<head>
+	<meta charset="utf-8"/>
+	<title>Привет WebGL</title>
+
+	<script id="vshader" type="x-shader/x-vertex">
+		// шейдър за върхове - не се интересува от върхове,
+		// а винаги генерира точка с координати (0,0,0)
+		void main ()
+		{
+			gl_Position = vec4(0,0,0,1);
+			gl_PointSize = 16.0;
+		}
+	</script>
+	
+	<script id="fshader" type="x-shader/x-fragment">
+		// шейдър за фрагменти - винаги слага червен цвят
+		void main( )
+		{
+			gl_FragColor = vec4(1,0,0,1);
+		}
+	</script>
+
+	<script>
+		function start( )
+		{
+			var canvas = document.getElementById("picasso");
+			
+			var gl = canvas.getContext("webgl");
+			if (!gl) {gl = canvas.getContext("experimental-webgl");}
+			if (!gl)
+			{
+				alert("Искаме WebGL контекст, а няма!");
+			}
+
+			var vSource = document.getElementById("vshader").text;
+			var fSource = document.getElementById("fshader").text;
+			
+			var vShader = gl.createShader(gl.VERTEX_SHADER);
+			gl.shaderSource(vShader,vSource);
+			gl.compileShader(vShader);
+			if (!gl.getShaderParameter(vShader,gl.COMPILE_STATUS))
+			{
+				alert(gl.getShaderInfoLog(vShader));
+			}
+			
+			var fShader = gl.createShader(gl.FRAGMENT_SHADER);
+			gl.shaderSource(fShader,fSource);
+			gl.compileShader(fShader);
+			if (!gl.getShaderParameter(fShader,gl.COMPILE_STATUS))
+			{
+				alert(gl.getShaderInfoLog(fShader));
+			}
+			
+			var shaderProgram = gl.createProgram();
+			gl.attachShader(shaderProgram, vShader);
+			gl.attachShader(shaderProgram, fShader);
+			gl.linkProgram(shaderProgram);
+			if (!gl.getProgramParameter(shaderProgram,gl.LINK_STATUS))
+			{
+				alert(gl.getProgramInfoLog(shaderProgram));
+			}
+
+			gl.useProgram(shaderProgram);
+
+			gl.clearColor(1,1,0,1);
+			gl.clear(gl.COLOR_BUFFER_BIT);
+
+			// рисуване на точка (детайлите - друг път)
+			gl.drawArrays(gl.POINTS,0,1);
+		}
+	</script>	
+</head>
+
+<body onload="start()">
+	<h2>Привет WebGL</h2>
+
+	<noscript>
+		Искаме JavaScript, но няма!
+	</noscript>
+	
+	<canvas id="picasso" width="600" height="400" style="border: solid;">
+		Искаме canvas, но няма!
+	</canvas>
+</body>

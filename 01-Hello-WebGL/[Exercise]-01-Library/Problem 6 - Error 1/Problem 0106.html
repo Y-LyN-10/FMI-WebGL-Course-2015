@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+
+<head>
+	<meta charset="utf-8"/>
+	<title>Привет WebGL</title>
+
+	<script src="webgl-fmi.js"></script>	
+	
+	<script id="vshader" type="x-shader/x-vertex">
+		void main ()
+		{
+			gl_Position = vec4(0,0,0,1);
+			gl_PointSize = 16.0;
+		}
+	</script>
+	
+	<script id="fshader" type="x-shader/x-fragment">
+		void main( )
+		{
+			gl_FragColor = vec4(1,1,0,1);
+		}
+	</script>
+
+	<script>
+		function start( )
+		{
+			gl = getContext("piccaso");
+			glprog = getProgram("vshader","fshader");
+
+			gl.clearColor(1,0,0,1);
+			gl.clear(gl.COLOR_BUFFER_BIT);
+
+			// рисуване на точка (детайлите - друг път)
+			gl.drawArrays(gl.POINTS,0,1);
+		}
+	</script>	
+</head>
+
+<body onload="start()">
+	<h2>Привет WebGL</h2>
+
+	<noscript>
+		Искаме JavaScript, но няма!
+	</noscript>
+	
+	<canvas id="picasso" width="600" height="400" style="border: solid;">
+		Искаме canvas, но няма!
+	</canvas>
+</body>
