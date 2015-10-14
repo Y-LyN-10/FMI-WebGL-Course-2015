@@ -7,6 +7,7 @@
 	<script src="webgl-fmi.js"></script>	
 	
 	<script id="vshader" type="x-shader/x-vertex">
+		// TODO: Fix colors
 		void main ()
 		{
 			gl_Position = vec4(0.935,0.9,0,1);
@@ -15,35 +16,35 @@
 	</script>
 	
 	<script id="fshader" type="x-shader/x-fragment">
+		// Changed from black to blue
 		void main( )
 		{
-			gl_FragColor = vec4(0,0,0,1);
+			gl_FragColor = vec4(0,0,1,1);
 		}
 	</script>
 
 	<script>
-		function start( )
-		{
-			var gl = getContext("picasso");
-			glprog = getProgram("vshader","fshader");
+		function start(id) {
+			// gl is global - we should not initialize it here
+			/* var */ gl = engine.getContext(id);
+			glprog = engine.run("vshader", "fshader");
 
-			gl.clearColor(0,0,0,1);
+			// Changed the color from black to sky-blue
+			// It's a mix of blue, some green... and regulate the opacity
+			gl.clearColor(0, 0.1, 1, 0.3);
 			gl.clear(gl.COLOR_BUFFER_BIT);
-
-			// рисуване на точка (детайлите - друг път)
-			gl.drawArrays(gl.POINTS,0,1);
+			gl.drawArrays(gl.POINTS, 0, 1);
 		}
-	</script>	
+	</script>
 </head>
 
-<body onload="start()">
-	<h2>Поправи ме, моля!</h2>
+<body onload="start('picasso')">
+<h2>Hello WebGL</h2>
+	<noscript> No JavaScript. </noscript>
 
-	<noscript>
-		Искаме JavaScript, но няма!
-	</noscript>
-	
-	<canvas id="рiсassо" width="600" height="400" style="border: solid;">
-		Искаме canvas, но няма!
+	<!-- We're looking for id 'picasso', not 'рiсassо'
+	    => change canvas id or getContext argument -->
+	<canvas id="picasso" width="600" height="400" style="border: solid;">
+		No canvas. Sorry.
 	</canvas>
 </body>
