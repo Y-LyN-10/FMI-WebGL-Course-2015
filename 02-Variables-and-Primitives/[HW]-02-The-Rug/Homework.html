@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+
+<head>
+	<meta charset="utf-8"/>
+	<title>Чергата</title>
+
+	<script src="webgl-fmi.js"></script>
+
+	<script id="vshader" type="x-shader/x-vertex">
+	    attribute vec2 aXY;
+	    attribute vec3 aRGB;
+		varying vec3 vRGB;
+        uniform vec2 u_RES; // resolution
+
+        void main() {
+            // convert the rectangle from pixels to 0.0 to 1.0 - they always go from -1 to +1
+            vec2 zeroToOne = aXY / u_RES;
+
+            // convert from 0->1 to 0->2
+            vec2 zeroToTwo = zeroToOne * 2.0;
+
+            // convert from 0->2 to -1->+1 (clipSpace)
+            vec2 clipSpace = zeroToTwo - 1.0;
+
+            // gl_Position = vec4(clipSpace, 0, 1);
+
+            // Set top left corner to be (0,0), not bottom left
+            gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
+            //gl_Position = vec4(aXY,0,1);
+
+            gl_PointSize = 10.0;
+
+			vRGB = aRGB;
+        }
+    </script>
+
+	<script id="fshader" type="x-shader/x-fragment">
+		precision mediump float;
+		varying vec3 vRGB;
+		uniform vec4 u_color;
+
+		void main()
+		{
+			//gl_FragColor = vec4(vRGB,1);
+			gl_FragColor = u_color;
+		}
+    </script>
+
+	<script>
+		function start() {
+			gl = engine.getContext("picasso");
+			glprog = engine.run("vshader", "fshader");
+
+			u_RES = gl.getUniformLocation(glprog, "u_RES");
+			aXY = gl.getAttribLocation(glprog, "aXY");
+			aRGB = gl.getAttribLocation(glprog, "aRGB");
+			colorLocation = gl.getUniformLocation(glprog, "u_color");
+
+			gl.clearColor(1, 1, 1, 1);
+			gl.clear(gl.COLOR_BUFFER_BIT);
+
+			var strips = 11;
+			var data = [];
+
+			engine.drawRugWithThreads(400,500); // width, height
+
+		}
+	</script>
+	<script src="helpers.js"></script>
+</head>
+
+<body onload="start()">
+	<h2>Чергата</h2>
+
+	<noscript> No JavaScript. </noscript>
+	
+	<canvas id="picasso" width="400" height="600" style="border: none;">
+		No canvas. Sorry.
+	</canvas>
+</body>
