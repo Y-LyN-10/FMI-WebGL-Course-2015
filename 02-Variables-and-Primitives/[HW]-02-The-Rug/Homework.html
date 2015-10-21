@@ -41,7 +41,6 @@
 
 		void main()
 		{
-			//gl_FragColor = vec4(vRGB,1);
 			gl_FragColor = u_color;
 		}
     </script>
@@ -59,13 +58,18 @@
 			gl.clearColor(1, 1, 1, 1);
 			gl.clear(gl.COLOR_BUFFER_BIT);
 
-			var strips = 11;
-			var data = [];
+			//var strips = 11;
+			//var data = [];
 
-			engine.drawRugWithThreads(400,500); // width, height
+			// Заиграх се и експериментирах, но условието на домашното не го изпълних.
+			// Получи се голяма каша, прострелях се в крака многократно (с тези пиксели особено)
+			// ... и даже нямам идея как да го оправя. Изпращам го в такъв вид за обратна връзка.
+			// Благодаря.
 
+			engine.drawRugWithThreads(350,450); // width, height
 		}
 	</script>
+
 	<script src="helpers.js"></script>
 </head>
 
@@ -73,7 +77,7 @@
 	<h2>Чергата</h2>
 
 	<noscript> No JavaScript. </noscript>
-	
+
 	<canvas id="picasso" width="400" height="600" style="border: none;">
 		No canvas. Sorry.
 	</canvas>
